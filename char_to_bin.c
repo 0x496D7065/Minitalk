@@ -6,14 +6,14 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 08:50:11 by lpetit            #+#    #+#             */
-/*   Updated: 2024/01/26 11:37:29 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/01/27 17:38:09 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 //#include <stdlib.h>
 
-static int	ft_count_digit(int value)
+/*static int	ft_count_digit(int value)
 {
 	int	digit_count;
 
@@ -26,24 +26,26 @@ static int	ft_count_digit(int value)
 		digit_count++;
 	}
 	return (digit_count);
-}
+}*/
 
 char	*char_to_bin(int c)
 {
 	char	*base;
 	char	*str;
-	int		count;
+	int		i;
 
 	base = "01";
-	count = ft_count_digit(c);
-	str = (char *)malloc((count + 2) * sizeof(char));
-	str[count + 1] = '\0';
-	while (count >= 0)
+	i = 7;
+	//count = ft_count_digit(c);
+	str = ft_calloc(9, sizeof(char));
+	str[i + 1] = '\0';
+	while (c > 0)
 	{
-		str[count--] = base[c % 2];
+		str[i--] = base[c % 2];
 		c /= 2;
 	}
-	str[0] = '0';
+	while (i >= 0)
+		str[i--] = '0';
 	return (str);
 }
 
