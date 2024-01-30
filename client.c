@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 09:56:37 by lpetit            #+#    #+#             */
-/*   Updated: 2024/01/30 16:50:13 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/01/30 17:29:03 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minitalk.h"
@@ -20,32 +20,28 @@ static void	send_sig(int pid, char *tosend)
 	i = 0;
 	while (tosend[i])
 	{
-		signal_processed = 1;
 		ft_printf("%c", tosend[i]);
 		if (tosend[i] == '0')
 		{
 			kill(pid, SIGUSR1);
-			ft_printf("=%s ", "SIG1");
+			ft_printf("%s ", "   ");
 		}
 		else if (tosend[i] == '1')
 		{
 			kill(pid, SIGUSR2);
-			ft_printf("=%s ", "SIG2");
+			ft_printf("%s ", "   ");
 		}
 		i++;
-		while (signal_processed != 0)
-		{
-			ft_printf("%d\n", signal_processed);
-		}
+		usleep(100);
 	}
 }
-void	sig_handler(int signum)
+void	sig_handler(int signum, siginfo_t *info, void *context)
 {
+	(void)info;
+	(void)context;
 	if (signum == SIGUSR1)
-	{
 		signal_processed = 0;
-		ft_printf("%ss\n", "signal reset");
-	}
+	ft_printf("%ss\n", "signal reset");
 }
 int	main(int argc, char **argv)
 {
@@ -61,7 +57,7 @@ int	main(int argc, char **argv)
 		i = 0;
 		sigemptyset(&sa.sa_mask);
 		sa.sa_flags = SA_RESTART | SA_SIGINFO;
-		sa.sa_handler = &sig_handler;
+		sa.sa_sigaction = sig_handler;
 		n = sigaction(SIGUSR1, &sa, NULL);
 		if (n == -1)
 			exit(EXIT_FAILURE);
@@ -69,18 +65,22 @@ int	main(int argc, char **argv)
 		//signal(SIGUSR1, &sig_handler);
 		send_sig(pid, argv[2]);
 		while (argv[2][i])
-		{
-			tosend = char_to_bin(argv[2][i]);
-			//ft_printf("%d\n", pid);
-			//ft_printf("%c\n", argv[2][i]);
-			//ft_printf("%s\n", tosend);
-			send_sig(pid, tosend);
-			free(tosend);
-			i++;
+		{	
+			if (signal_processed == 0)
+			{
+				signal_processed = 1;
+				tosend = char_to_bin(argv[2][i]);
+				//ft_printf("%d\n", pid);
+				//ft_printf("%c\n", argv[2][i]);
+				//ft_printf("%s\n", tosend);
+				send_sig(pid, tosend);
+				free(tosend);
+				i++;
+			}
 		}
-		tosend = char_to_bin('\0');
-		send_sig(pid, tosend);
-		free(tosend);
+		//tosend = char_to_bin('\0');
+		//send_sig(pid, tosend);
+		//free(tosend);
 	}
 	return (0);
 }
