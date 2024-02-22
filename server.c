@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 09:41:30 by lpetit            #+#    #+#             */
-/*   Updated: 2024/01/30 17:03:57 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/02/09 10:16:08 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	print_bin(int signum, siginfo_t *info, void *context)
 
 int	main(void)
 {
-	pid_t	pid;
-	int	n;
-	struct sigaction sa;
+	pid_t				pid;
+	int					n;
+	struct sigaction	sa;
 
 	pid = getpid();
 	ft_printf("Server PID: %d\n", pid);

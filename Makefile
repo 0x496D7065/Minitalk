@@ -6,19 +6,15 @@
 #    By: lpetit <lpetit@student.s19.be>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 12:46:17 by lpetit            #+#    #+#              #
-#    Updated: 2024/01/26 10:40:28 by lpetit           ###   ########.fr        #
+#    Updated: 2024/02/09 14:15:12 by lpetit           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME= test
-
 INCLUDES = -L./includes
 
-SRCS_DIR = ./srcs/
+SERVER_OBJS= server.o
 
-Server_OBJS= server.o
-
-Client_OBJS= client.o char_to_bin.o
+CLIENT_OBJS= client.o char_to_bin.o
 
 CFLAGS = -Wall -Werror -Wextra -I./includes
 
@@ -26,17 +22,18 @@ CFLAGS = -Wall -Werror -Wextra -I./includes
 
 all: server client
 
-server: $(Server_OBJS)
+server: $(SERVER_OBJS)
 		$(CC) $(CFLAGS) -o $@ $^ $(INCLUDES) -lftprintf -lft
 
-client: $(Client_OBJS)
+client: $(CLIENT_OBJS)
 		$(CC) $(CFLAGS) -o $@ $^ $(INCLUDES) -lftprintf -lft
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -rf *.o
+	rm -rf $(SERVER_OBJS)
+	rm -rf $(CLIENT_OBJS)
 
 fclean:	clean
 	rm -rf server
